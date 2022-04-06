@@ -307,7 +307,7 @@ if st.button('Radial basis function kernel'):
     st.write("Fitting on train set")
     model = KernelRidge(kernel='rbf', alpha=3.1622776601683795e-10, gamma=1e-8)
     model.fit(train_pred_df, train_target_df)
-    filename = 'polarizattion_model.sav'
+    filename = 'polarization_model.sav'
     pickle.dump(model, open(filename, 'wb'))
     st.write("Calculating predictions on test set")
     predictions = model.predict(test_pred_df)
@@ -329,7 +329,7 @@ if st.button('Radial basis function kernel '):
     st.write("Fitting on train set")
     model = KernelRidge(kernel='poly', alpha=1.7782794100696326, degree=3)
     model.fit(train_pred_df, train_target_df)
-    filename = 'polarizattion_model.sav'
+    filename = 'excitation_energy_model.sav'
     pickle.dump(model, open(filename, 'wb'))
     st.write("Calculating predictions on test set")
     predictions = model.predict(test_pred_df)
