@@ -10,7 +10,7 @@ from ase.calculators.aims import Aims
 from sklearn.model_selection import train_test_split
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.metrics import mean_squared_error, r2_score
-from utilities import get_geometries, initialize, plot_molecule, plot_target
+from Utilities.utilities import get_geometries, initialize, plot_molecule, plot_target
 
 
 # Options for streamlit
@@ -25,19 +25,19 @@ st.write('''
 ---
 ''')
 st.image(
-    'Presi Artworks_01/star_molecules.webp'
+    'App_Artworks/star_molecules.webp'
 )
 st.write('[Image Source](https://www.nature.com/articles/s41570-020-0189-9)')
 
 expander_bar_what = st.expander("What?")
-expander_bar_what.image('Presi Artworks_01/Maria Final Spiced Presi_01-01.png')
+expander_bar_what.image('App_Artworks/Final_01-01.png')
 
 expander_bar_why = st.expander("Why?")
-expander_bar_why.image('Presi Artworks_01/Maria Final Spiced Presi_01-02.png')
-expander_bar_why.image('Presi Artworks_01/Maria Final Spiced Presi_01-03.png')
+expander_bar_why.image('App_Artworks/Final_01-02.png')
+expander_bar_why.image('App_Artworks/Final_01-03.png')
 
 expander_bar_how = st.expander("How?")
-expander_bar_how.image('Presi Artworks_01/Maria Final Spiced Presi_01-04.png')
+expander_bar_how.image('App_Artworks/Final_01-04.png')
 
 
 # Collect variables
@@ -67,16 +67,16 @@ compound space]
 
 # Part 1a
 st.subheader('Molecules')
-st.image('Presi Artworks_01/Maria Final Spiced Presi_01-06.png', width=40)
+st.image('App_Artworks/Final_01-06.png', width=40)
 st.write(
     'Molecules are described by the chemical formula and the atomic positions'
 )
 
 if st.button('Show Random Molecule'):
     random_geometry = random.choice(geometries)
-    with open('random_geometry.xyz', 'w') as f:
+    with open('Utilities/random_geometry.xyz', 'w') as f:
         f.write(random_geometry)
-    random_molecule = io.read('random_geometry.xyz')
+    random_molecule = io.read('Utilities/random_geometry.xyz')
     raw_html = f"""
         <h2 align="center">{random_molecule.get_chemical_formula()}</h2>
     """
@@ -93,7 +93,7 @@ Python package for molecules: [ASE](https://wiki.fysik.dtu.dk/ase/index.html)
 
 # Part 1b
 st.subheader('Properties')
-st.image('Presi Artworks_01/Maria Final Spiced Presi_01-09.png', width=50)
+st.image('App_Artworks/Final_01-09.png', width=50)
 
 if st.button('Atomization Energies'):
     plot_target(targets_df['ae_pbe0'], 'Atomization Energies (kcal/mol)')
@@ -112,7 +112,7 @@ approximation to
 [Kohn-Sham Density Functional Theory]
 (https://en.wikipedia.org/wiki/Kohn-Sham_equations).
 ''')
-st.image('Presi Artworks_01/Maria Final Spiced Presi_01-10.png', width=70)
+st.image('App_Artworks/Final_01-10.png', width=70)
 
 
 # Part 2
@@ -120,12 +120,12 @@ st.markdown('''
 ----------------
 ''')
 st.header('2. FEATURE ENGINEERING')
-st.image('Presi Artworks_01/Maria Final Spiced Presi_01-05.png')
+st.image('App_Artworks/Final_01-05.png')
 st.write(
     'Translation and Rotation invariant representation for ML simulations'
 )
 st.subheader('DESCRIPTORS')
-st.image('Presi Artworks_01/Maria Final Spiced Presi_01-07.png', width=60)
+st.image('App_Artworks/Final_01-07.png', width=60)
 st.write('''
 * [Coulomb Matrix]
 (https://singroup.github.io/dscribe/latest/tutorials/descriptors/coulomb_matrix.html)
@@ -146,7 +146,7 @@ st.markdown('''
 ----------------
 ''')
 st.header('3. MACHINE LEARNING')
-st.image('Presi Artworks_01/Maria Final Spiced Presi_01-08.png', width=60)
+st.image('App_Artworks/Final_01-08.png', width=60)
 st.write("""
 **Model of choice:** Kernel Ridge Regression 
 
@@ -206,30 +206,30 @@ if st.button('Radial basis function kernel'):
     plt.plot(list(test_target_df), list(test_target_df), 'k-')
     st.pyplot(bbox_inches='tight')
 
-st.subheader('Excitation Energy')
-if st.button('Radial basis function kernel '):
-    train_pred_df, test_pred_df, train_target_df, test_target_df \
-        = train_test_split(
-            df.drop(columns=['chemical formula']),
-            targets_df['lumo_pbe0']-targets_df['homo_pbe0'],
-            test_size=0.33,
-            random_state=0
-        )
-    st.write("Fitting on train set")
-    model = KernelRidge(kernel='poly', alpha=1.7782794100696326, degree=3)
-    model.fit(train_pred_df, train_target_df)
-    filename = 'excitation_energy_model.sav'
-    pickle.dump(model, open(filename, 'wb'))
-    st.write("Calculating predictions on test set")
-    predictions = model.predict(test_pred_df)
-    rmse = mean_squared_error(test_target_df, predictions, squared=False)
-    st.write(f'rmse: {rmse:.2f} kcal/mol or {rmse*0.043:.2f}  (eV)')
-    st.write('R2 score is: %.4f' % r2_score(test_target_df, predictions))
-    plt.plot(test_target_df, predictions, 'o')
-    plt.xlabel('True')
-    plt.ylabel('Predicted')
-    plt.plot(list(test_target_df), list(test_target_df), 'k-')
-    st.pyplot(bbox_inches='tight')
+# st.subheader('Excitation Energy')
+# if st.button('Radial basis function kernel '):
+#     train_pred_df, test_pred_df, train_target_df, test_target_df \
+#         = train_test_split(
+#             df.drop(columns=['chemical formula']),
+#             targets_df['lumo_pbe0']-targets_df['homo_pbe0'],
+#             test_size=0.33,
+#             random_state=0
+#         )
+#     st.write("Fitting on train set")
+#     model = KernelRidge(kernel='poly', alpha=1.7782794100696326, degree=3)
+#     model.fit(train_pred_df, train_target_df)
+#     filename = 'excitation_energy_model.sav'
+#     pickle.dump(model, open(filename, 'wb'))
+#     st.write("Calculating predictions on test set")
+#     predictions = model.predict(test_pred_df)
+#     rmse = mean_squared_error(test_target_df, predictions, squared=False)
+#     st.write(f'rmse: {rmse:.2f} kcal/mol or {rmse*0.043:.2f}  (eV)')
+#     st.write('R2 score is: %.4f' % r2_score(test_target_df, predictions))
+#     plt.plot(test_target_df, predictions, 'o')
+#     plt.xlabel('True')
+#     plt.ylabel('Predicted')
+#     plt.plot(list(test_target_df), list(test_target_df), 'k-')
+#     st.pyplot(bbox_inches='tight')
 
 st.write('Find out more about KKR [here](https://youtu.be/H_MVlljpYHw)')
 
@@ -238,7 +238,7 @@ st.markdown('''
 ----------------
 ''')
 st.header('4. PREDICT')
-st.image('Presi Artworks_01/Maria Final Spiced Presi_01-12.png', width=60)
+st.image('App_Artworks/Final_01-12.png', width=60)
 
 input = st.selectbox('Choose a molecule:', val_df['chemical formula'])
 loaded_model_pol = pickle.load(open('polarization_model.sav', 'rb'))
@@ -314,9 +314,9 @@ st.subheader('Choose Hyperparameters')
 kernel = st.selectbox('Choose kernel:',
                       ['Polynomial', 'Radial basis function kernel'])
 alpha = st.number_input('Input alpha',
-                        min_value=1e-11, max_value=None)
+                        min_value=1e-11, max_value=None, format='%f')
 exp_gamma = st.number_input('Input gamma for RBF',
-                            min_value=1e-11, max_value=None)
+                            min_value=1e-11, max_value=None, format='%f')
 degree = st.number_input('Input degree for polynomial',
                          min_value=1, max_value=5)
 

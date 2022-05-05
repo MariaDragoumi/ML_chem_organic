@@ -15,7 +15,7 @@ def get_geometries():
     Reads dataset input file.
     Returns a list were each entry is a single molecule geometry.
     """
-    with open('gdb7-13/dsgdb7njp.xyz', 'r') as f:
+    with open('data/gdb7-13/dsgdb7njp.xyz', 'r') as f:
         geometries = f.read()
     geometries = geometries.split('\n\n')
     return geometries
@@ -39,21 +39,21 @@ def molecules_lists(geometries):
     val_targets = []
     for i, geometry in enumerate(geometries):
         if i not in val_set_index:
-            with open(f'geometries/{i}.xyz', 'w') as f:
+            with open(f'data/geometries/{i}.xyz', 'w') as f:
                 f.write(geometry)
-            small_molecules.append(io.read(f'geometries/{i}.xyz'))
+            small_molecules.append(io.read(f'data/geometries/{i}.xyz'))
             targets.append(
                 [float(val) for val in geometry.split('\n')[1].split(' ')]
             )
-            os.remove(f'geometries/{i}.xyz')
+            os.remove(f'data/geometries/{i}.xyz')
         else:
-            with open(f'geometries/{i}.xyz', 'w') as f:
+            with open(f'data/geometries/{i}.xyz', 'w') as f:
                 f.write(geometry)
-            val_small_molecules.append(io.read(f'geometries/{i}.xyz'))
+            val_small_molecules.append(io.read(f'data/geometries/{i}.xyz'))
             val_targets.append(
                 [float(val) for val in geometry.split('\n')[1].split(' ')]
             )
-            os.remove(f'geometries/{i}.xyz')
+            os.remove(f'data/geometries/{i}.xyz')
     return small_molecules, targets, val_small_molecules, val_targets
 
 
@@ -67,7 +67,6 @@ def plot_molecule(molecule):
     molecule.translate(-molecule.get_center_of_mass())
     html_item = view(molecule, viewer='x3d')
     return html_item._repr_html_()
-    
 
 
 @st.cache(allow_output_mutation=True)
@@ -179,7 +178,8 @@ def initialize(geometries):
         species.update(mol.get_chemical_symbols())
     df = feature_dataframe(small_molecules, species)
     val_df = val_feature_dataframe(val_small_molecules, species)
-    return small_molecules, targets, val_small_molecules, val_targets, df, val_df, targets_df, val_targets_df
+    return small_molecules, targets, val_small_molecules, val_targets,\
+        df, val_df, targets_df, val_targets_df
 
 
 def plot_target(this_df, title):
