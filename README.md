@@ -56,17 +56,12 @@ and type:
 ```
 
 This should open a web browser and the app should start running. This might take a while. After initialization is done the app is ready to use.
-See the next section for details about the app.
+
 
 4) When finished, you can deactivate a virtual environment by typing:
 ```sh
 deactivate
 ```
 
-### Details about the application
 
-
-
-## Epilogue
-The model was built by following at my best the guide lines described here: https://rdcu.be/cMDFt
 
